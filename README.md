@@ -43,7 +43,6 @@ Screenshot of Finished Orders
 - Node 10.x or above
 - NPM 5.x or above
 - PG 6.x
-- Twilio
 - Express
 - Nodemon
 - Sass
