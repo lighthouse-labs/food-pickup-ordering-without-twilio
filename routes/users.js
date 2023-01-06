@@ -6,7 +6,7 @@
 
 const express = require("express");
 const router = express.Router();
-const { sendClientText, sendRestoText } = require("../db/queries/twilio.js");
+// const { sendClientText, sendRestoText } = require("../db/queries/twilio.js");
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
@@ -18,7 +18,7 @@ module.exports = (db) => {
     return db
       .query (`
         SELECT required_time
-        FROM orders 
+        FROM orders
         WHERE id = (SELECT MAX(id) FROM orders)
         `,
       )
@@ -128,7 +128,7 @@ module.exports = (db) => {
     return db
       .query(lateQuery)
       .then((result) => {
-        sendRestoText(orderID);
+        // sendRestoText(orderID);
       })
       .catch((err) => {
         console.log("DB write error:", err);
@@ -155,7 +155,7 @@ module.exports = (db) => {
     });
   });
 
-// Change update time 
+// Change update time
   router.post("/addTime", (req, res) => {
     // increase timer required_time
     const order_id = req.body["order_id"];
@@ -188,16 +188,16 @@ module.exports = (db) => {
             queryParams
           )
           .then((result) => {
-            sendClientText(`${phoneNumber}`, `${req.body["extra-time"]}`);
             return res.redirect("/restaurant");
           })
           .catch((err) => {
-            console.log("Invalid phone #:", err);
+            console.log("Invalid phone #:", err.message);
             return res.redirect("/restaurant");
-          });       
+          });
       })
       .catch((err) => {
         console.log("Error", err);
+        return res.redirect("/restaurant");
       });
   });
 
